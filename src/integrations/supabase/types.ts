@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      grain_scans: {
+        Row: {
+          broken_pct: number
+          chalky_pct: number
+          created_at: string
+          device_id: string
+          foreign_pct: number
+          grade: string
+          id: string
+          image_url: string | null
+          immature_pct: number
+          moisture: number
+          qualified: boolean
+          quality_score: number
+        }
+        Insert: {
+          broken_pct?: number
+          chalky_pct?: number
+          created_at?: string
+          device_id: string
+          foreign_pct?: number
+          grade: string
+          id?: string
+          image_url?: string | null
+          immature_pct?: number
+          moisture: number
+          qualified?: boolean
+          quality_score: number
+        }
+        Update: {
+          broken_pct?: number
+          chalky_pct?: number
+          created_at?: string
+          device_id?: string
+          foreign_pct?: number
+          grade?: string
+          id?: string
+          image_url?: string | null
+          immature_pct?: number
+          moisture?: number
+          qualified?: boolean
+          quality_score?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -119,7 +119,9 @@
   --color-grain-earth: var(--grain-earth);
   --color-success: var(--success);
   --color-warning: var(--warning);
+  --font-sans: "Manrope", "Noto Sans Tamil", ui-sans-serif, system-ui, sans-serif;
 }
+
 
 @layer base {
   * {

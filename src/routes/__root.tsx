@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SiteHeader } from "@/components/SiteHeader";
+import { I18nProvider, useI18n } from "@/lib/i18n";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -119,8 +122,31 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <I18nProvider>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          <main className="flex-1">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+        <Toaster position="top-center" />
+      </I18nProvider>
     </QueryClientProvider>
   );
 }
+
+function Footer() {
+  const { t } = useI18n();
+  return (
+    <footer className="no-print border-t border-border bg-secondary/40 py-8">
+      <div className="mx-auto max-w-6xl px-4 text-sm text-muted-foreground">
+        <p className="font-semibold text-foreground">{t("app.name")}</p>
+        <p className="mt-1">{t("app.tagline")}</p>
+        <p className="mt-3">{t("footer.note")}</p>
+      </div>
+    </footer>
+  );
+}
+

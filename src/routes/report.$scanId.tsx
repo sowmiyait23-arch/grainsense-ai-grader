@@ -79,6 +79,33 @@ function ReportPage() {
         {new Date(data.created_at).toLocaleString()}
       </p>
 
+      <div
+        className={`mt-6 flex items-center gap-4 rounded-3xl border-2 p-5 sm:p-6 ${
+          data.qualified
+            ? "border-success/60 bg-success/10"
+            : "border-destructive/60 bg-destructive/10"
+        }`}
+      >
+        {data.qualified ? (
+          <CheckCircle2 className="size-12 shrink-0 text-success" />
+        ) : (
+          <AlertTriangle className="size-12 shrink-0 text-destructive" />
+        )}
+        <div>
+          <p className="text-sm font-medium text-muted-foreground">{t("result.verdict")}</p>
+          <p
+            className={`text-3xl font-extrabold tracking-tight sm:text-4xl ${
+              data.qualified ? "text-success" : "text-destructive"
+            }`}
+          >
+            {data.qualified ? t("result.qualified") : t("result.notQualified")}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {data.qualified ? t("result.healthyBody") : t("result.notHealthyBody")}
+          </p>
+        </div>
+      </div>
+
       <div className="shadow-soft mt-6 overflow-hidden rounded-3xl border border-border bg-card">
         <div className="bg-hero flex flex-wrap items-center justify-between gap-4 p-6">
           <div>
@@ -86,18 +113,6 @@ function ReportPage() {
             <div className="mt-2">
               <GradeBadge grade={data.grade} size="lg" />
             </div>
-            <p
-              className={`mt-3 inline-flex items-center gap-1.5 text-sm font-semibold ${
-                data.qualified ? "text-success" : "text-destructive"
-              }`}
-            >
-              {data.qualified ? (
-                <CheckCircle2 className="size-4" />
-              ) : (
-                <AlertTriangle className="size-4" />
-              )}
-              {data.qualified ? t("result.qualified") : t("result.notQualified")}
-            </p>
           </div>
 
           <div className="text-right">

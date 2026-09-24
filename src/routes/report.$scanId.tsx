@@ -178,7 +178,7 @@ function ReportPage() {
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex h-14 flex-1 items-center justify-center gap-2 rounded-2xl border border-border bg-card font-semibold transition-colors hover:bg-secondary"
+          className="inline-flex h-14 shrink-0 items-center sm:flex-1 justify-center gap-2 rounded-2xl border border-border bg-card font-semibold transition-colors hover:bg-secondary"
         >
           <Download className="size-5" />
           {t("result.download")}
@@ -186,14 +186,14 @@ function ReportPage() {
         <button
           type="button"
           onClick={share}
-          className="inline-flex h-14 flex-1 items-center justify-center gap-2 rounded-2xl border border-border bg-card font-semibold transition-colors hover:bg-secondary"
+          className="inline-flex h-14 shrink-0 items-center sm:flex-1 justify-center gap-2 rounded-2xl border border-border bg-card font-semibold transition-colors hover:bg-secondary"
         >
           <Share2 className="size-5" />
           {t("result.share")}
         </button>
         <Link
           to="/analyze"
-          className="bg-leaf inline-flex h-14 flex-1 items-center justify-center rounded-2xl font-semibold text-primary-foreground"
+          className="bg-leaf inline-flex h-14 shrink-0 items-center sm:flex-1 justify-center rounded-2xl font-semibold text-primary-foreground"
         >
           {t("result.new")}
         </Link>

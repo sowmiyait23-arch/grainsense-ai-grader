@@ -95,3 +95,16 @@ export function defectsOf(scan: ScanRecord): DefectBreakdown {
     immature: Number(scan.immature_pct),
   };
 }
+
+const REASON_PREFIX = "grainsense.reason.";
+export function saveReason(id: string, reason: string) {
+  try {
+    localStorage.setItem(REASON_PREFIX + id, reason);
+  } catch {
+    /* optional */
+  }
+}
+export function getReason(id: string): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(REASON_PREFIX + id);
+}

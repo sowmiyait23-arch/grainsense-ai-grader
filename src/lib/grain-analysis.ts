@@ -10,7 +10,7 @@
  * No component code needs to change.
  */
 
-export const SAFE_MOISTURE_PCT = 14;
+export const SAFE_MOISTURE_PCT = 17;
 
 export type DefectBreakdown = {
   broken: number;
@@ -27,6 +27,7 @@ export type AnalysisResult = {
   qualified: boolean;
   defects: DefectBreakdown;
   moisture: number;
+  reason?: string | undefined;
 };
 
 export type CnnPrediction = {
@@ -80,7 +81,7 @@ export async function readMoistureSensor(): Promise<number> {
 }
 
 export function gradeFromScore(score: number, moisture: number): Grade {
-  if (moisture > 18 || score < 55) return "Reject";
+  if (moisture > 20 || score < 55) return "Reject";
   if (score >= 85 && moisture <= SAFE_MOISTURE_PCT) return "A";
   if (score >= 70) return "B";
   return "C";
@@ -93,9 +94,36 @@ export function scoreSample(defects: DefectBreakdown, moisture: number): number 
   return +Math.max(0, Math.min(100, 100 - defectPenalty - moisturePenalty)).toFixed(1);
 }
 
-/** Full pipeline: image defects + moisture -> grade. */
+async function toDataUrl(file: File, max = 1024): Promise<string> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d")?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL("image/jpeg", 0.85);
+}
+
+/**
+ * Full pipeline: image defects + moisture -> grade + Healthy/Not healthy verdict.
+ * Uses the custom CNN when VITE_CNN_ENDPOINT is set, otherwise Lovable AI vision.
+ */
 export async function analyzeGrainSample(file: File, moisture: number): Promise<AnalysisResult> {
-  const { defects } = await predictDefects(file);
+  let defects: DefectBreakdown;
+  let visuallyHealthy = true;
+  let reason: string | undefined;
+
+  if (CNN_ENDPOINT) {
+    defects = (await predictDefects(file)).defects;
+  } else {
+    const { assessGrainWithAI } = await import("./grain-ai.functions");
+    const ai = await assessGrainWithAI({ data: { imageDataUrl: await toDataUrl(file), moisture } });
+    if (!ai.isGrainImage) throw new Error("NOT_GRAIN");
+    defects = { broken: ai.broken, chalky: ai.chalky, foreign: ai.foreign, immature: ai.immature };
+    visuallyHealthy = ai.healthy;
+    reason = ai.reason;
+  }
+
   const qualityScore = scoreSample(defects, moisture);
   const grade = gradeFromScore(qualityScore, moisture);
   return {
@@ -103,6 +131,7 @@ export async function analyzeGrainSample(file: File, moisture: number): Promise<
     qualityScore,
     defects,
     moisture,
-    qualified: grade !== "Reject" && moisture <= SAFE_MOISTURE_PCT,
+    reason,
+    qualified: visuallyHealthy && grade !== "Reject" && moisture <= SAFE_MOISTURE_PCT,
   };
 }

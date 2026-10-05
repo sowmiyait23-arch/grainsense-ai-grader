@@ -15,7 +15,7 @@ const Schema = z.object({
 export type GrainAssessment = z.infer<typeof Schema>;
 
 export async function runGrainAssessment(imageDataUrl: string, moisture: number) {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("AI is not configured");
 
   const provider = createOpenAI({
@@ -35,7 +35,7 @@ export async function runGrainAssessment(imageDataUrl: string, moisture: number)
         role: "user",
         content: [
           { type: "text", text: `Moisture probe reading: ${moisture}%. Assess the visible grain health.` },
-          { type: "image", image: imageDataUrl },
+          { type: "file", mediaType: "image/jpeg", data: imageDataUrl },
         ],
       },
     ],

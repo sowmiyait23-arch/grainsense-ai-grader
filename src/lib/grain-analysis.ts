@@ -27,7 +27,7 @@ export type AnalysisResult = {
   qualified: boolean;
   defects: DefectBreakdown;
   moisture: number;
-  reason?: string;
+  reason?: string | undefined;
 };
 
 export type CnnPrediction = {

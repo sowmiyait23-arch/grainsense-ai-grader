@@ -4,7 +4,7 @@ import { Camera, ImageUp, Loader2, Radio } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { analyzeGrainSample, readMoistureSensor } from "@/lib/grain-analysis";
-import { makeThumbnail, saveScan, saveThumbnail } from "@/lib/scan-store";
+import { makeThumbnail, saveReason, saveScan, saveThumbnail } from "@/lib/scan-store";
 
 export const Route = createFileRoute("/analyze")({
   head: () => ({
@@ -70,6 +70,7 @@ function AnalyzePage() {
     try {
       const result = await analyzeGrainSample(file, m);
       const scan = await saveScan(result);
+      if (result.reason) saveReason(scan.id, result.reason);
       try {
         saveThumbnail(scan.id, await makeThumbnail(file));
       } catch {
@@ -78,7 +79,9 @@ function AnalyzePage() {
       navigate({ to: "/report/$scanId", params: { scanId: scan.id } });
     } catch (err) {
       console.error(err);
-      toast.error(t("upload.failed"));
+      toast.error(
+        err instanceof Error && err.message === "NOT_GRAIN" ? t("upload.notGrain") : t("upload.failed"),
+      );
     } finally {
       setBusy(false);
     }

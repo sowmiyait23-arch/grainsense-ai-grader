@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { GradeBadge } from "@/components/GradeBadge";
 import { useI18n } from "@/lib/i18n";
 import { SAFE_MOISTURE_PCT } from "@/lib/grain-analysis";
-import { defectsOf, getScan, getThumbnail } from "@/lib/scan-store";
+import { defectsOf, getReason, getScan, getThumbnail } from "@/lib/scan-store";
 
 export const Route = createFileRoute("/report/$scanId")({
   head: () => ({
@@ -32,7 +32,11 @@ function ReportPage() {
   const { t } = useI18n();
   const [thumb, setThumb] = useState<string | null>(null);
 
-  useEffect(() => setThumb(getThumbnail(scanId)), [scanId]);
+  const [reason, setReason] = useState<string | null>(null);
+  useEffect(() => {
+    setThumb(getThumbnail(scanId));
+    setReason(getReason(scanId));
+  }, [scanId]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["scan", scanId],
@@ -103,6 +107,11 @@ function ReportPage() {
           <p className="mt-1 text-sm text-muted-foreground">
             {data.qualified ? t("result.healthyBody") : t("result.notHealthyBody")}
           </p>
+          {reason && (
+            <p className="mt-2 text-sm">
+              <span className="font-semibold">{t("result.aiReason")}:</span> {reason}
+            </p>
+          )}
         </div>
       </div>
 

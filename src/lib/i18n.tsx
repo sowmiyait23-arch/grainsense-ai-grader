@@ -165,7 +165,7 @@ const ta: Record<keyof typeof en, string> = {
   "result.foreign": "வெளிப்பொருள் கழிவு",
   "result.immature": "முதிராத மணிகள்",
   "result.moisture": "ஈரப்பதம்",
-  "result.safe": "சேமிப்பிற்கு பாதுகாப்பானது",
+  "result.safe": "ஈரப்பதம் சரி (17% அல்லது குறைவு)",
   "result.unsafe": "17%க்கு மேல் — தானியத்தில் அதிக ஈரப்பதம், உலர்த்தவும்",
   "result.threshold": "ஈரப்பத வரம்பு: 17%",
   "result.aiReason": "AI கண்டறிதல்",

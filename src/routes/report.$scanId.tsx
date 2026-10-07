@@ -1,11 +1,10 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { CheckCircle2, AlertTriangle, Download, Share2, Droplets } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Download, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { GradeBadge } from "@/components/GradeBadge";
 import { useI18n } from "@/lib/i18n";
-import { SAFE_MOISTURE_PCT } from "@/lib/grain-analysis";
 import { defectsOf, getReason, getScan, getThumbnail } from "@/lib/scan-store";
 
 export const Route = createFileRoute("/report/$scanId")({
@@ -15,12 +14,12 @@ export const Route = createFileRoute("/report/$scanId")({
       {
         name: "description",
         content:
-          "Grade, defect breakdown, moisture safety and combined quality score for your paddy sample.",
+          "Grade, defect breakdown and combined quality score for your paddy sample.",
       },
       { property: "og:title", content: "Grain quality report — GrainSense AI" },
       {
         property: "og:description",
-        content: "Grade, defect breakdown and moisture safety for your paddy sample.",
+        content: "Grade, defect breakdown and quality score for your paddy sample.",
       },
     ],
   }),
@@ -51,8 +50,6 @@ function ReportPage() {
   }
 
   const defects = defectsOf(data);
-  const moisture = Number(data.moisture);
-  const safe = moisture <= SAFE_MOISTURE_PCT;
   const score = Number(data.quality_score);
 
   const rows = [
@@ -156,33 +153,6 @@ function ReportPage() {
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-2xl border border-border p-4">
-              <p className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                <Droplets className="size-4" />
-                {t("result.moisture")}
-              </p>
-              <p className="mt-1 text-3xl font-bold">{moisture}%</p>
-              <div className="relative mt-3 h-2.5 overflow-hidden rounded-full bg-secondary">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${Math.min(100, (moisture / 25) * 100)}%`,
-                    backgroundColor: safe ? "var(--success)" : "var(--destructive)",
-                  }}
-                />
-                <span
-                  className="absolute top-0 h-full w-0.5 bg-foreground/50"
-                  style={{ left: `${(SAFE_MOISTURE_PCT / 25) * 100}%` }}
-                />
-              </div>
-              <p
-                className={`mt-2 text-sm font-semibold ${safe ? "text-success" : "text-destructive"}`}
-              >
-                {safe ? t("result.safe") : t("result.unsafe")}
-              </p>
-              <p className="text-xs text-muted-foreground">{t("result.threshold")}</p>
-            </div>
-
             {thumb && (
               <div>
                 <p className="text-sm font-medium text-muted-foreground">{t("result.sample")}</p>

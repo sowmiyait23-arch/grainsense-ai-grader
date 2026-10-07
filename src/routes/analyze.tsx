@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import { Camera, ImageUp, Loader2, Radio } from "lucide-react";
+import { Camera, ImageUp, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
-import { analyzeGrainSample, readMoistureSensor } from "@/lib/grain-analysis";
+import { analyzeGrainSample } from "@/lib/grain-analysis";
 import { makeThumbnail, saveReason, saveScan, saveThumbnail } from "@/lib/scan-store";
 
 export const Route = createFileRoute("/analyze")({
@@ -33,10 +33,8 @@ function AnalyzePage() {
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [moisture, setMoisture] = useState("");
   const [dragging, setDragging] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [reading, setReading] = useState(false);
 
   function acceptFile(f: File | undefined) {
     if (!f || !f.type.startsWith("image/")) return;
@@ -44,31 +42,14 @@ function AnalyzePage() {
     setPreview(URL.createObjectURL(f));
   }
 
-  async function fetchSensor() {
-    setReading(true);
-    try {
-      const value = await readMoistureSensor();
-      setMoisture(String(value));
-    } catch {
-      toast.error(t("upload.failed"));
-    } finally {
-      setReading(false);
-    }
-  }
-
   async function onAnalyze() {
     if (!file) {
       toast.error(t("upload.needImage"));
       return;
     }
-    const m = Number(moisture);
-    if (!moisture || Number.isNaN(m) || m < 5 || m > 30) {
-      toast.error(t("upload.needMoisture"));
-      return;
-    }
     setBusy(true);
     try {
-      const result = await analyzeGrainSample(file, m);
+      const result = await analyzeGrainSample(file);
       const scan = await saveScan(result);
       if (result.reason) saveReason(scan.id, result.reason);
       try {
@@ -155,36 +136,6 @@ function AnalyzePage() {
           hidden
           onChange={(e) => acceptFile(e.target.files?.[0])}
         />
-      </div>
-
-      <div className="mt-6 rounded-3xl border border-border bg-card p-5">
-        <label htmlFor="moisture" className="font-semibold">
-          {t("upload.moisture")}
-        </label>
-        <div className="mt-3 flex gap-3">
-          <input
-            id="moisture"
-            type="number"
-            inputMode="decimal"
-            step="0.1"
-            min={5}
-            max={30}
-            value={moisture}
-            onChange={(e) => setMoisture(e.target.value)}
-            placeholder="14.0"
-            className="h-14 w-full rounded-2xl border border-input bg-background px-4 text-lg outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-          />
-          <button
-            type="button"
-            onClick={fetchSensor}
-            disabled={reading}
-            className="inline-flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-border px-4 font-semibold transition-colors hover:bg-secondary disabled:opacity-60"
-          >
-            {reading ? <Loader2 className="size-5 animate-spin" /> : <Radio className="size-5" />}
-            <span className="hidden sm:inline">{t("upload.fetch")}</span>
-          </button>
-        </div>
-        <p className="mt-2 text-sm text-muted-foreground">{t("upload.moistureHint")}</p>
       </div>
 
       <button

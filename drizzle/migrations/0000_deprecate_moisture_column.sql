@@ -1,0 +1,1 @@
+COMMENT ON COLUMN public.grain_scans.moisture IS 'DEPRECATED: moisture module removed from the app; column unused, kept for historical rows.';

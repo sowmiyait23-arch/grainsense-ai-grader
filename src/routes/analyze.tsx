@@ -13,7 +13,7 @@ export const Route = createFileRoute("/analyze")({
       {
         name: "description",
         content:
-          "Upload or capture a paddy grain photo, add the moisture reading and get an instant AI quality grade.",
+          "Upload or capture a paddy grain photo and get an instant AI quality grade.",
       },
       { property: "og:title", content: "Analyze a paddy sample — GrainSense AI" },
       {

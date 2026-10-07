@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Camera, ScanLine, FileCheck2, Clock3, Scale, Droplets, ArrowRight } from "lucide-react";
+import { Camera, ScanLine, FileCheck2, Clock3, Scale, Eye, ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-paddy.jpg";
 import { useI18n } from "@/lib/i18n";
 
@@ -10,13 +10,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Upload a paddy sample photo and get an AI grade in seconds: defect breakdown, moisture safety and a shareable quality report for farmers, FPOs and procurement centres.",
+          "Upload a paddy sample photo and get an AI grade in seconds: defect breakdown and a shareable quality report for farmers, FPOs and procurement centres.",
       },
       { property: "og:title", content: "GrainSense AI — Instant paddy grain quality grading" },
       {
         property: "og:description",
         content:
-          "CNN-based grain defect analysis plus moisture sensing gives one objective quality grade in under a minute.",
+          "CNN-based grain defect analysis gives one objective quality grade from a photo in under a minute.",
       },
     ],
   }),
@@ -29,7 +29,7 @@ function Landing() {
   const problems = [
     { icon: Clock3, title: t("problem.1.title"), body: t("problem.1.body") },
     { icon: Scale, title: t("problem.2.title"), body: t("problem.2.body") },
-    { icon: Droplets, title: t("problem.3.title"), body: t("problem.3.body") },
+    { icon: Eye, title: t("problem.3.title"), body: t("problem.3.body") },
   ];
 
   const steps = [

@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { GradeBadge } from "@/components/GradeBadge";
 import { useI18n } from "@/lib/i18n";
 import { getThumbnail, listScans } from "@/lib/scan-store";
-import { SAFE_MOISTURE_PCT } from "@/lib/grain-analysis";
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -101,7 +100,6 @@ function HistoryPage() {
         <ul className="mt-6 space-y-3">
           {scans.map((s) => {
             const thumb = getThumbnail(s.id);
-            const safe = Number(s.moisture) <= SAFE_MOISTURE_PCT;
             return (
               <li key={s.id}>
                 <Link
@@ -124,11 +122,7 @@ function HistoryPage() {
                       {new Date(s.created_at).toLocaleString()}
                     </p>
                     <p className="mt-1 font-semibold">
-                      {t("common.moisture")}:{" "}
-                      <span className={safe ? "text-success" : "text-destructive"}>
-                        {Number(s.moisture)}%
-                      </span>
-                      <span className="ml-3 text-muted-foreground">{s.quality_score}/100</span>
+                      <span className="text-muted-foreground">{s.quality_score}/100</span>
                     </p>
                   </div>
                   <GradeBadge grade={s.grade} size="sm" />

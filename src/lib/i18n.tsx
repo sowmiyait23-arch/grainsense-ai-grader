@@ -21,7 +21,7 @@ const en = {
   "hero.badge": "MSME Idea Hackathon 5.0",
   "hero.title": "Grade your paddy in seconds, not hours",
   "hero.subtitle":
-    "Manual grain grading is slow, inconsistent and subjective. GrainSense AI combines CNN-based visual defect analysis with an embedded moisture sensor to give farmers, FPOs and procurement centres one instant, objective quality report.",
+    "Manual grain grading is slow, inconsistent and subjective. GrainSense AI uses CNN-based visual defect analysis to give farmers, FPOs and procurement centres one instant, objective quality report from a single photo.",
   "hero.cta": "Try it now",
   "hero.secondary": "See past scans",
   "hero.imageAlt": "Golden paddy grains on natural linen",
@@ -31,8 +31,8 @@ const en = {
   "problem.1.body": "Hand sorting a sample takes 20–30 minutes per lot at the procurement gate.",
   "problem.2.title": "Subjective judgement",
   "problem.2.body": "Two inspectors often grade the same lot differently, causing disputes over price.",
-  "problem.3.title": "Moisture guesswork",
-  "problem.3.body": "Storage losses happen when paddy above 17% moisture is bagged as safe.",
+  "problem.3.title": "Defects go unnoticed",
+  "problem.3.body": "Broken, chalky and immature grains slip through quick visual checks and lower the lot's value.",
 
   "how.title": "How it works",
   "how.subtitle": "Three steps, under a minute.",
@@ -41,22 +41,18 @@ const en = {
   "how.2.title": "AI analyzes",
   "how.2.body": "The CNN model detects broken, chalky, immature grains and foreign matter.",
   "how.3.title": "Get graded report",
-  "how.3.body": "Grade, defect breakdown, moisture safety and a shareable summary card.",
+  "how.3.body": "Grade, defect breakdown and a shareable summary card.",
 
   "upload.title": "Upload & analyze",
-  "upload.subtitle": "Photo of the grain sample plus a moisture reading gives the best accuracy.",
+  "upload.subtitle": "Take or upload a clear photo of the grain sample — the AI does the rest.",
   "upload.drop": "Drag & drop a grain sample photo",
   "upload.or": "or",
   "upload.browse": "Choose file",
   "upload.camera": "Use camera",
   "upload.change": "Replace photo",
-  "upload.moisture": "Moisture level (%)",
-  "upload.moistureHint": "Enter the sensor reading. Hardware sensor integration coming soon.",
-  "upload.fetch": "Read sensor",
   "upload.analyze": "Analyze sample",
   "upload.analyzing": "Analyzing…",
   "upload.needImage": "Please add a photo of the grain sample first.",
-  "upload.needMoisture": "Please enter a moisture value between 5 and 30%.",
   "upload.failed": "Analysis failed. Please try again.",
 
   "result.title": "Quality report",
@@ -72,10 +68,6 @@ const en = {
   "result.chalky": "Chalky / discoloured",
   "result.foreign": "Foreign matter",
   "result.immature": "Immature grains",
-  "result.moisture": "Moisture level",
-  "result.safe": "Moisture OK (17% or below)",
-  "result.unsafe": "Above 17% — grain has too much moisture, dry before storage",
-  "result.threshold": "Moisture threshold: 17%",
   "result.aiReason": "AI observation",
   "upload.notGrain": "This photo does not look like a grain sample. Please try another photo.",
   "result.sample": "Sample image",
@@ -97,10 +89,9 @@ const en = {
   "history.loading": "Loading scans…",
 
   "common.grade": "Grade",
-  "common.moisture": "Moisture",
   "common.date": "Date",
   "common.back": "Back",
-  "footer.note": "Prototype — CNN inference and moisture sensor endpoints are pluggable stubs.",
+  "footer.note": "Prototype — the CNN inference endpoint is a pluggable stub.",
 };
 
 const ta: Record<keyof typeof en, string> = {

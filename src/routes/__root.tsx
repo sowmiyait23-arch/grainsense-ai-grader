@@ -91,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "GrainSense AI — Paddy grain quality grading" },
       {
         property: "og:description",
-        content: "Instant grain grade from a photo plus moisture reading.",
+        content: "Instant grain grade from a single photo.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

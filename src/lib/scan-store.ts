@@ -4,7 +4,6 @@ import type { AnalysisResult, DefectBreakdown, Grade } from "./grain-analysis";
 export type ScanRecord = {
   id: string;
   created_at: string;
-  moisture: number;
   grade: Grade;
   quality_score: number;
   qualified: boolean;
@@ -55,7 +54,6 @@ export async function saveScan(result: AnalysisResult): Promise<ScanRecord> {
     .from("grain_scans")
     .insert({
       device_id: getDeviceId(),
-      moisture: result.moisture,
       grade: result.grade,
       quality_score: result.qualityScore,
       qualified: result.qualified,

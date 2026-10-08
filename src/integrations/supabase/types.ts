@@ -25,7 +25,7 @@ export type Database = {
           id: string
           image_url: string | null
           immature_pct: number
-          moisture: number
+          moisture: number | null
           qualified: boolean
           quality_score: number
         }
@@ -39,7 +39,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           immature_pct?: number
-          moisture: number
+          moisture?: number | null
           qualified?: boolean
           quality_score: number
         }
@@ -53,7 +53,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           immature_pct?: number
-          moisture?: number
+          moisture?: number | null
           qualified?: boolean
           quality_score?: number
         }

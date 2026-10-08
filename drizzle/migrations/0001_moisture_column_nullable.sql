@@ -1,0 +1,1 @@
+ALTER TABLE public.grain_scans ALTER COLUMN moisture DROP NOT NULL;

@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Leaf } from "lucide-react";
-import { useI18n, languages } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n";
 
 export function SiteHeader() {
-  const { t, lang, setLang } = useI18n();
+  const { t } = useI18n();
 
   const navItems = [
     { to: "/", label: t("nav.home") },
@@ -22,7 +21,7 @@ export function SiteHeader() {
           <span className="truncate text-base font-semibold tracking-tight">{t("app.name")}</span>
         </Link>
 
-        <nav className="ml-auto hidden items-center gap-1 sm:flex">
+        <nav className="ml-auto flex items-center gap-1">
           {navItems.map((item) => (
             <Link
               key={item.to}
@@ -35,40 +34,7 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-
-        <div className="ml-auto flex items-center gap-1 rounded-full border border-border bg-card p-1 sm:ml-2">
-          {languages.map((l) => (
-            <button
-              key={l.code}
-              type="button"
-              onClick={() => setLang(l.code)}
-              aria-pressed={lang === l.code}
-              className={cn(
-                "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
-                lang === l.code
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {l.label}
-            </button>
-          ))}
-        </div>
       </div>
-
-      <nav className="no-print flex gap-1 border-t border-border/60 px-4 py-2 sm:hidden">
-        {navItems.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            className="flex-1 rounded-lg px-3 py-2 text-center text-sm font-medium text-muted-foreground"
-            activeProps={{ className: "bg-secondary text-foreground" }}
-            activeOptions={{ exact: item.to === "/" }}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
     </header>
   );
 }

@@ -1,16 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
-
-export type Lang = "en" | "ta";
+import { createContext, useContext, type ReactNode } from "react";
 
 /**
- * All UI strings live here. Add a new language by adding a key to `translations`
- * and to `languages` — no component changes required.
+ * All UI strings live here. English is the only supported language; every
+ * component reads text through the `t()` helper.
  */
-export const languages: { code: Lang; label: string }[] = [
-  { code: "en", label: "English" },
-  { code: "ta", label: "தமிழ்" },
-];
-
 const en = {
   "app.name": "GrainSense AI",
   "app.tagline": "AI paddy grain quality grading",
@@ -61,7 +54,7 @@ const en = {
   "result.notQualified": "Not healthy",
   "result.verdict": "Verdict",
   "result.healthyBody": "This sample is healthy — good to store or sell.",
-  "result.notHealthyBody": "This sample is not healthy — check defects and dry it before storage.",
+  "result.notHealthyBody": "This sample is not healthy — check defects before storage.",
   "result.score": "Combined quality score",
   "result.defects": "Defect breakdown",
   "result.broken": "Broken grains",
@@ -94,123 +87,17 @@ const en = {
   "footer.note": "Prototype — the CNN inference endpoint is a pluggable stub.",
 };
 
-const ta: Record<keyof typeof en, string> = {
-  "app.name": "GrainSense AI",
-  "app.tagline": "AI நெல் தர மதிப்பீடு",
-  "nav.home": "முகப்பு",
-  "nav.analyze": "பகுப்பாய்வு",
-  "nav.history": "வரலாறு",
-
-  "hero.badge": "MSME ஐடியா ஹேக்கத்தான் 5.0",
-  "hero.title": "நெல்லின் தரத்தை நிமிடங்களில் அல்ல, விநாடிகளில் அறியுங்கள்",
-  "hero.subtitle":
-    "கையால் தரம் பிரிப்பது மெதுவானது, ஒரே சீராக இல்லாதது, தனிநபர் கருத்தை சார்ந்தது. GrainSense AI, CNN அடிப்படையிலான காட்சி குறைபாடு பகுப்பாய்வு மூலம் ஒரே புகைப்படத்தில் விவசாயிகள், FPO மற்றும் கொள்முதல் நிலையங்களுக்கு உடனடி தர அறிக்கை வழங்குகிறது.",
-  "hero.cta": "இப்போது முயற்சிக்கவும்",
-  "hero.secondary": "பழைய பரிசோதனைகள்",
-  "hero.imageAlt": "இயற்கை துணியில் பொன்னிற நெல் மணிகள்",
-
-  "problem.title": "ஏன் மாற்றம் தேவை",
-  "problem.1.title": "மெதுவான கைமுறை சோதனை",
-  "problem.1.body": "ஒரு மாதிரியை கையால் பிரிக்க 20–30 நிமிடங்கள் ஆகிறது.",
-  "problem.2.title": "தனிநபர் கருத்து",
-  "problem.2.body": "ஒரே மாதிரிக்கு இரு பரிசோதகர்கள் வெவ்வேறு தரம் தருவதால் விலை தகராறு.",
-  "problem.3.title": "குறைபாடுகள் தெரிவதில்லை",
-  "problem.3.body": "விரைவான கண் பரிசோதனையில் உடைந்த, சுண்ணாம்பு, முதிராத மணிகள் தெரியாமல் போய் மொத்தத்தின் மதிப்பு குறைகிறது.",
-
-  "how.title": "எப்படி வேலை செய்கிறது",
-  "how.subtitle": "மூன்று படிகள், ஒரு நிமிடத்திற்குள்.",
-  "how.1.title": "படம் பதிவேற்றம்",
-  "how.1.body": "மாதிரியை பரப்பி மொபைலில் புகைப்படம் எடுக்கவும் அல்லது பதிவேற்றவும்.",
-  "how.2.title": "AI பகுப்பாய்வு",
-  "how.2.body": "CNN மாதிரி உடைந்த, சுண்ணாம்பு, முதிராத மணிகள் மற்றும் கழிவுகளை கண்டறியும்.",
-  "how.3.title": "தர அறிக்கை",
-  "how.3.body": "தரம், குறைபாடு விவரம் மற்றும் பகிரக்கூடிய அறிக்கை.",
-
-  "upload.title": "பதிவேற்றி பகுப்பாய்வு செய்க",
-  "upload.subtitle": "மாதிரியின் தெளிவான புகைப்படத்தை எடுக்கவும் அல்லது பதிவேற்றவும் — மீதியை AI பார்த்துக்கொள்ளும்.",
-  "upload.drop": "நெல் மாதிரி புகைப்படத்தை இழுத்து விடுங்கள்",
-  "upload.or": "அல்லது",
-  "upload.browse": "கோப்பைத் தேர்வு செய்க",
-  "upload.camera": "கேமரா பயன்படுத்து",
-  "upload.change": "படத்தை மாற்று",
-  "upload.analyze": "மாதிரியை பகுப்பாய்வு செய்",
-  "upload.analyzing": "பகுப்பாய்வு நடக்கிறது…",
-  "upload.needImage": "முதலில் மாதிரி புகைப்படத்தை சேர்க்கவும்.",
-  "upload.failed": "பகுப்பாய்வு தோல்வி. மீண்டும் முயற்சிக்கவும்.",
-
-  "result.title": "தர அறிக்கை",
-  "result.grade": "மொத்த தரம்",
-  "result.qualified": "ஆரோக்கியமானது",
-  "result.notQualified": "ஆரோக்கியமற்றது",
-  "result.verdict": "முடிவு",
-  "result.healthyBody": "இந்த மாதிரி ஆரோக்கியமானது — சேமிக்கவோ விற்கவோ ஏற்றது.",
-  "result.notHealthyBody": "இந்த மாதிரி ஆரோக்கியமற்றது — குறைபாடுகளை பார்த்து சேமிப்பதற்கு முன் உலர்த்தவும்.",
-  "result.score": "மொத்த தர மதிப்பெண்",
-  "result.defects": "குறைபாடு விவரம்",
-  "result.broken": "உடைந்த மணிகள்",
-  "result.chalky": "சுண்ணாம்பு / நிறமாறிய",
-  "result.foreign": "வெளிப்பொருள் கழிவு",
-  "result.immature": "முதிராத மணிகள்",
-  "result.aiReason": "AI கண்டறிதல்",
-  "upload.notGrain": "இந்த படம் எதிர்பார்த்த வடிவத்தில் இல்லை — நெல் மணிகளின் தெளிவான படத்தை மட்டும் பதிவேற்றவும்.",
-  "result.sample": "மாதிரி படம்",
-  "result.download": "அறிக்கையை பதிவிறக்கு / அச்சிடு",
-  "result.share": "பகிர்",
-  "result.new": "மற்றொரு மாதிரி",
-  "result.notFound": "அறிக்கை கிடைக்கவில்லை.",
-  "result.loading": "அறிக்கை ஏற்றப்படுகிறது…",
-  "result.recommend": "பரிந்துரை",
-
-  "history.title": "பரிசோதனை வரலாறு",
-  "history.subtitle": "இந்த சாதனத்தில் நீங்கள் பகுப்பாய்வு செய்த மாதிரிகள்.",
-  "history.empty": "இதுவரை பரிசோதனை இல்லை. முதல் மாதிரியை பகுப்பாய்வு செய்யுங்கள்.",
-  "history.filterGrade": "தரம் வாரியாக வடிகட்டு",
-  "history.all": "அனைத்து தரங்கள்",
-  "history.from": "தேதியில் இருந்து",
-  "history.clear": "வடிகட்டியை நீக்கு",
-  "history.view": "அறிக்கையை பார்",
-  "history.loading": "ஏற்றப்படுகிறது…",
-
-  "common.grade": "தரம்",
-  "common.date": "தேதி",
-  "common.back": "பின்செல்",
-  "footer.note": "முன்மாதிரி — CNN இணைப்பு மாற்றக்கூடிய stub.",
-};
-
-export const translations: Record<Lang, Record<string, string>> = { en, ta };
-
 export type TranslationKey = keyof typeof en;
 
 type I18nValue = {
-  lang: Lang;
-  setLang: (l: Lang) => void;
   t: (key: TranslationKey) => string;
 };
 
 const I18nContext = createContext<I18nValue | null>(null);
 
-const STORAGE_KEY = "grainsense.lang";
-
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en");
-
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY) as Lang | null;
-    if (stored && stored in translations) setLangState(stored);
-  }, []);
-
-  const setLang = useCallback((l: Lang) => {
-    setLangState(l);
-    localStorage.setItem(STORAGE_KEY, l);
-    document.documentElement.lang = l;
-  }, []);
-
-  const t = useCallback(
-    (key: TranslationKey) => translations[lang][key] ?? translations.en[key] ?? key,
-    [lang],
-  );
-
-  return <I18nContext.Provider value={{ lang, setLang, t }}>{children}</I18nContext.Provider>;
+  const t = (key: TranslationKey) => en[key] ?? key;
+  return <I18nContext.Provider value={{ t }}>{children}</I18nContext.Provider>;
 }
 
 export function useI18n() {
